@@ -8,4 +8,8 @@ app.get('/', (req, res) => {
 })
 
 
+app.post("/home", (req, res) => {
+    console.log("I am on the homepage")
+})
+
 app.listen(PORT, console.log(`Server is runnng ${PORT}`));
