@@ -1,15 +1,19 @@
-const express = require('express')
+const express = require("express");
+require("dotenv").config();
+const sequelize = require("./config/database");
+const User = require("./models/User");
 const app = express();
-
-const PORT = 3000;
-
-app.get('/', (req, res) => {
-    res.send("Hey server is running")
-})
+const PORT = process.env.SERVER_PORT || 3000;
+app.use(express.json());
 
 
-app.post("/home", (req, res) => {
-    console.log("I am on the homepage")
-})
+app.get("/", (req, res) => {
+  res.send("Hey server is running");
+});
 
-app.listen(PORT, console.log(`Server is runnng ${PORT}`));
+
+
+app.listen(PORT, async() => {
+    console.log(`Server is running on ${PORT}`);
+    await sequelize.sync();
+});
