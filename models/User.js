@@ -1,4 +1,5 @@
 const { Model, DataTypes } = require("sequelize");
+const argon2 = require("argon2");
 const sequelize = require("../config/database");
 
 class User extends Model {}
@@ -20,7 +21,7 @@ User.init(
       allowNull: false,
       unique: true,
     },
-    password_hash: {
+    password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -62,8 +63,25 @@ User.init(
     timestamps: true,
     createdAt: "created_at",
     updatedAt: "updated_at",
+    hooks: {
+      beforeCreate: async (user) => {
+        if (user.password) {
+          user.password = await argon2.hash(user.password);
+        }
+      },
+      beforeUpdate: async (user) => {
+        if (user.changed("password")) {
+          user.password = await argon2.hash(user.password);
+        }
+      },
+    },
   }
 );
+
+User.prototype.verifyPassword = async function (password) {
+  return await argon2.verify(this.password, password);
+};
+
 
 User.associate = (models) => {
   User.belongsTo(models.Role, { foreignKey: "role_id", as: "role" });
