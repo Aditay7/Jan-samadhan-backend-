@@ -7,7 +7,14 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "seed:roles": "node scripts/seedRoles.js",
+    "seed:departments": "node scripts/seedDepartments.js",
+    "seed:categories": "node scripts/seedCategories.js",
+    "seed:admin": "node scripts/seedAdmin.js",
+    "seed:all": "npm run seed:roles && npm run seed:departments && npm run seed:categories && npm run seed:admin",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "argon2": "^0.44.0",
@@ -18,6 +25,7 @@
     "nodemon": "^3.1.10",
     "pg": "^8.16.3",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.37.7"
+    "sequelize": "^6.37.7",
+    "twilio": "^4.25.0"
   }
 }

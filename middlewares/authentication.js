@@ -1,4 +1,8 @@
 const jwt = require("jsonwebtoken");
+const {
+  getUserWithRole,
+  hasPermission,
+} = require("../services/authentication");
 
 const secret = process.env.JWT_SECRET;
 
@@ -18,8 +22,98 @@ function checkForAuthToken(req, res, next) {
     req.user = payload;
     next();
   } catch (err) {
-    return res.status(403).json({ message: "Invalid or expired token" });
+    if (err.name === "TokenExpiredError") {
+      return res
+        .status(401)
+        .json({ message: "Token expired", code: "TOKEN_EXPIRED" });
+    }
+    return res.status(403).json({ message: "Invalid token" });
   }
 }
 
-module.exports = checkForAuthToken;
+async function requireRole(allowedRoles) {
+  return async (req, res, next) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const user = await getUserWithRole(req.user.user_id);
+      if (!user) {
+        return res.status(401).json({ message: "User not found" });
+      }
+
+      const userRole = user.role?.role_name;
+      if (!userRole) {
+        return res.status(403).json({ message: "No role assigned" });
+      }
+
+      if (!allowedRoles.includes(userRole)) {
+        return res.status(403).json({
+          message: "Insufficient permissions",
+          required: allowedRoles,
+          current: userRole,
+        });
+      }
+
+      req.currentUser = user;
+      next();
+    } catch (error) {
+      console.error("Role middleware error:", error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  };
+}
+
+async function requirePermission(resource, action) {
+  return async (req, res, next) => {
+    try {
+      if (!req.currentUser) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const userPermissions = req.currentUser.role?.permissions;
+      if (!userPermissions) {
+        return res.status(403).json({ message: "No permissions assigned" });
+      }
+
+      if (!hasPermission(userPermissions, resource, action)) {
+        return res.status(403).json({
+          message: "Insufficient permissions",
+          required: { resource, action },
+          current: userPermissions,
+        });
+      }
+
+      next();
+    } catch (error) {
+      console.error("Permission middleware error:", error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  };
+}
+
+// Convenience middleware for specific roles
+const requireAdmin = requireRole(["admin"]);
+const requireDepartmentOfficer = requireRole(["admin", "department_officer"]);
+const requireSupervisor = requireRole([
+  "admin",
+  "department_officer",
+  "supervisor",
+]);
+const requireCitizen = requireRole([
+  "citizen",
+  "admin",
+  "department_officer",
+  "supervisor",
+]);
+
+module.exports = {
+  checkForAuthToken,
+  requireRole,
+  requirePermission,
+  requireAdmin,
+  requireDepartmentOfficer,
+  requireSupervisor,
+  requireCitizen,
+};

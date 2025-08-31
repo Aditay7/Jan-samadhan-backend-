@@ -1,19 +1,18 @@
-const sequelize = require("../config/database");
-const Role = require("./Role");
 const User = require("./User");
+const Role = require("./Role");
+const Department = require("./Department");
+const Category = require("./Category");
 
-const models = {
-  Role,
-  User,
-};
-
-Object.values(models).forEach((model) => {
-  if (typeof model.associate === "function") {
-    model.associate(models);
-  }
-});
+// Set up associations
+User.associate({ Role, Department });
+Role.associate({ User });
+Department.associate({ User });
+Category.associate({ Department });
 
 module.exports = {
-  sequelize,
-  ...models,
+  User,
+  Role,
+  Department,
+  Category,
+  sequelize: require("../config/database"),
 };
