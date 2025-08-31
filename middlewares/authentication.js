@@ -31,7 +31,7 @@ function checkForAuthToken(req, res, next) {
   }
 }
 
-async function requireRole(allowedRoles) {
+function requireRole(allowedRoles) {
   return async (req, res, next) => {
     try {
       if (!req.user) {
@@ -65,7 +65,7 @@ async function requireRole(allowedRoles) {
   };
 }
 
-async function requirePermission(resource, action) {
+function requirePermission(resource, action) {
   return async (req, res, next) => {
     try {
       if (!req.currentUser) {

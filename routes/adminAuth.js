@@ -10,8 +10,8 @@ const {
 } = require("../controllers/adminAuth");
 const {
   checkForAuthToken,
-  requireRole,
-  requirePermission,
+  requireAdmin,
+  requireDepartmentOfficer,
 } = require("../middlewares/authentication");
 const handleValidationErrors = require("../middlewares/validation");
 
@@ -24,24 +24,19 @@ router.post("/web-login", validateWebLogin, handleValidationErrors, WebLogin);
 router.post(
   "/create-department-user",
   checkForAuthToken,
-  requireRole(["admin"]),
+  requireAdmin,
   validateCreateDepartmentUser,
   handleValidationErrors,
   CreateDepartmentUser
 );
 
-router.get(
-  "/users/:role",
-  checkForAuthToken,
-  requireRole(["admin"]),
-  GetUsersByRole
-);
+router.get("/users/:role", checkForAuthToken, requireAdmin, GetUsersByRole);
 
 // Department routes (require department officer authentication)
 router.post(
   "/create-supervisor",
   checkForAuthToken,
-  requireRole(["department_officer"]),
+  requireDepartmentOfficer,
   validateCreateSupervisor,
   handleValidationErrors,
   CreateSupervisor

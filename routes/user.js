@@ -11,8 +11,7 @@ const {
 } = require("../controllers/user");
 const {
   checkForAuthToken,
-  requireRole,
-  requirePermission,
+  requireAdmin,
 } = require("../middlewares/authentication");
 const handleValidationErrors = require("../middlewares/validation");
 
@@ -98,7 +97,7 @@ router.post("/logout", checkForAuthToken, Logout);
 router.post(
   "/register-admin",
   checkForAuthToken,
-  requireRole(["admin"]),
+  requireAdmin,
   validateRegistration,
   handleValidationErrors,
   RegisterUser
