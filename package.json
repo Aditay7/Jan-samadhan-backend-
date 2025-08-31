@@ -9,11 +9,13 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "seed:roles": "node scripts/seedRoles.js",
-    "seed:departments": "node scripts/seedDepartments.js",
-    "seed:categories": "node scripts/seedCategories.js",
-    "seed:admin": "node scripts/seedAdmin.js",
-    "seed:all": "npm run seed:roles && npm run seed:departments && npm run seed:categories && npm run seed:admin",
+    "db:migrate": "sequelize-cli db:migrate",
+    "db:migrate:undo": "sequelize-cli db:migrate:undo",
+    "db:migrate:undo:all": "sequelize-cli db:migrate:undo:all",
+    "db:migrate:status": "sequelize-cli db:migrate:status",
+    "db:seed:all": "sequelize-cli db:seed:all",
+    "db:seed:undo:all": "sequelize-cli db:seed:undo:all",
+    "db:reset": "npm run db:migrate:undo:all && npm run db:migrate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -27,5 +29,8 @@
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.7",
     "twilio": "^5.8.2"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.3"
   }
 }

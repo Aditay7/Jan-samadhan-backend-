@@ -71,8 +71,7 @@ app.listen(PORT, async () => {
   try {
     await sequelize.authenticate();
     console.log("✅ Database connection established successfully.");
-    await sequelize.sync();
-    console.log("✅ Database synchronized successfully.");
+    console.log("📝 Note: Run 'npm run db:migrate' to set up database tables.");
   } catch (error) {
     console.error("❌ Database connection failed:", error);
   }
