@@ -1,7 +1,6 @@
 const { Sequelize } = require("sequelize");
 require("dotenv").config({ quiet: true });
 
-// Create and export Sequelize instance for the app
 let sequelize;
 
 if (process.env.DATABASE_URL) {

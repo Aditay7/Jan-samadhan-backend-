@@ -27,7 +27,7 @@ class SMSService {
 
       // Send SMS via Twilio
       const message = await this.client.messages.create({
-        body: `Your Jal Samadhan OTP is: ${otp}. Valid for 5 minutes.`,
+        body: `Your Samvedan OTP is: ${otp}. Valid for 5 minutes.`,
         from: this.fromNumber,
         to: phoneNumber,
       });

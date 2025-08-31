@@ -34,16 +34,17 @@ class OTPService {
         // Create temporary user for new registration
         const { Role } = require("../models");
         const citizenRole = await Role.findOne({
-          where: { role_name: "citizen" },
+          where: { role_name: "Citizen" },
         });
 
         user = await User.create({
           phone_number: phoneNumber,
-          name: null, // Will be filled after OTP verification
+          name: "Citizen", // Temporary name, will be updated after OTP verification
           role_id: citizenRole.role_id,
           login_method: "otp",
           is_phone_verified: false,
           is_active: true,
+          is_profile_complete: false,
         });
       }
 
@@ -98,7 +99,8 @@ class OTPService {
       });
 
       // Check if user profile is complete
-      const isProfileComplete = user.name && user.name !== "Citizen";
+      const isProfileComplete =
+        user.is_profile_complete && user.name !== "Citizen";
 
       if (isProfileComplete) {
         // Existing user with complete profile - generate tokens and login
@@ -158,8 +160,10 @@ class OTPService {
       }
 
       // Update profile data
-      const updateData = {};
-      if (profileData.name) updateData.name = profileData.name;
+      const updateData = {
+        name: profileData.name,
+        is_profile_complete: true
+      };
       if (profileData.email) updateData.email = profileData.email;
       if (profileData.address) updateData.address = profileData.address;
 
