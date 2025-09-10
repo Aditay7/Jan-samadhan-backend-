@@ -102,7 +102,7 @@ const requireSupervisor = requireRole([
   "supervisor",
 ]);
 const requireCitizen = requireRole([
-  "Citizen",
+  "citizen",
   "admin",
   "department_officer",
   "supervisor",

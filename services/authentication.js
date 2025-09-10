@@ -9,7 +9,7 @@ function createTokenForUser(user) {
     user_id: user.user_id,
     email: user.email,
     role_id: user.role_id,
-    role_name: user.role?.role_name || "citizen",
+    role_name: (user.role?.role_name || "citizen").toLowerCase(),
   };
 
   const accessToken = JWT.sign(payload, secret, { expiresIn: "15m" });

@@ -20,7 +20,7 @@ const RegisterUser = async (req, res) => {
     if (role_name && req.user?.role_name === "admin") {
       role = await Role.findOne({ where: { role_name } });
     } else {
-      role = await Role.findOne({ where: { role_name: "Citizen" } });
+      role = await Role.findOne({ where: { role_name: "citizen" } });
     }
 
     if (!role) {

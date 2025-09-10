@@ -8,7 +8,7 @@ module.exports = {
       "roles",
       [
         {
-          role_name: "Citizen",
+          role_name: "citizen",
           description: "Regular citizen who can report issues",
           permissions: JSON.stringify({
             issues: ["create", "read_own", "update_own"],
@@ -19,7 +19,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          role_name: "Supervisor",
+          role_name: "supervisor",
           description: "Field supervisor who handles issues",
           permissions: JSON.stringify({
             issues: ["read", "update", "assign"],
@@ -31,7 +31,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          role_name: "Department Officer",
+          role_name: "department_officer",
           description: "Department staff who manages issues",
           permissions: JSON.stringify({
             issues: ["read", "update", "assign", "resolve"],
@@ -44,7 +44,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          role_name: "Admin",
+          role_name: "admin",
           description: "System administrator with full access",
           permissions: JSON.stringify({
             issues: ["read", "create", "update", "delete"],
