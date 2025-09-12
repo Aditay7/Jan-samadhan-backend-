@@ -30,7 +30,7 @@ const adminAuthRoute = require("./routes/adminAuth");
 
 app.get("/", (req, res) => {
   res.json({
-    message: "Jal Samadhan Backend API",
+    message: "Samvedan Backend API",
     version: "1.0.0",
     status: "running",
     endpoints: {
